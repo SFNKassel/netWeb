@@ -1,0 +1,26 @@
+{
+  "mac": "a",
+  "ip": "ip",
+  "ping": 42,
+  "nodes": [
+    {
+      "mac": "b",
+      "ip": "ip",
+      "ping": 42,
+      "nodes": [
+        {
+          "mac": "c",
+          "ip": "ip",
+          "ping": 42,
+          "nodes": []
+        }
+      ]
+    },
+    {
+      "mac": "d",
+      "ip": "ip",
+      "ping": 42,
+      "nodes": []
+    }
+  ]
+}
