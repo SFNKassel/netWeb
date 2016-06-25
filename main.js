@@ -2,12 +2,12 @@
  * Created by jaro on 24.06.16.
  * this is the main JS File...
  */
-
+first = true;
 console.log("started...");
 
 var size = {
-    width: document.body.clientWidth,
-    height: document.body.clientHeight
+    width: document.body.clientWidth - 20,
+    height: document.body.clientHeight - 20
 };
 
 var color = d3.scale.category20();
@@ -22,11 +22,6 @@ var force = d3.layout.force()
     .size([size.width, size.height]);
 
 var ws = new WebSocket("ws://10.0.2.35:8888");
-ws.onopen = function()
-{
-    // Web Socket is connected, send data using send()
-    ws.send("Message to send");
-};
 
 ws.onmessage = function (evt)
 {

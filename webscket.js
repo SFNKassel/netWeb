@@ -3,6 +3,7 @@
  */
 
 function update(netString, force) {
+    console.log("got message: \n" + netString);
     //parse the network object, we are getting...
     var network = JSON.parse(netString);
     console.log(network);
@@ -12,20 +13,22 @@ function update(netString, force) {
     
     appendToList(network, nodeList, linkList, 0);
 
-    console.log(nodeList);
-    console.log(linkList);
-
     var graph = {
         nodes: nodeList,
         links: linkList
     };
-
-    force
-        .nodes(graph.nodes)
-        .links(graph.links)
-        .linkStrength(function(d){return 100 / Math.pow(d.value, 2)})
-        .gravity(.05)
-        .start();
+    
+    if(first) {
+        force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .linkDistance(function(d){return 500 / Math.pow(d.value, .2)})
+            .gravity(.05)
+            .start();
+        first = false;
+    } else {
+        return;
+    }
 
 
     //let the lib do the voodo!
@@ -39,17 +42,28 @@ function update(netString, force) {
 
     var node = svg.selectAll(".node")
         .data(graph.nodes)
-        .enter().append("circle")
+        .enter().append("g")
         .attr("class", "node")
+        .call(force.drag);
+
+    node.append("circle")
         .attr("r", 10)
         .style("fill", function (d) {
             return color(d.group);
         })
-        .call(force.drag);
+
+
+    node.append("text")
+        .attr("dx", 12)
+        .attr("dy", ".35em")
+        .text(function(d) {
+            return d.name;
+        });
+
 
     node.append("title")
         .text(function (d) {
-            return d.name;
+            return d.mac;
         });
 
     force.on("tick", function () {
@@ -67,10 +81,7 @@ function update(netString, force) {
             });
 
         node.attr("cx", function (d) {
-                return d.x;
-            })
-            .attr("cy", function (d) {
-                return d.y;
-            });
+            node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        });
     });
 }
